@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ContactsDao">
+   
+	
+	
+	<select id="findContactsByMaster" parameterType="String"   resultMap="contactsMap"  >
+	   select * 
+	   from contacts
+	   where master_phone = #{masterPhone}
+	</select>   
+	
+	<select id="pageContactsByMaster" parameterType="java.util.HashMap"   resultMap="contactsMap"  >
+	   select contacts_id,friend_phone,name,modify_time
+	   from contacts
+	   where master_phone = #{masterPhone}
+	   order by modify_time desc
+	   limit #{start},#{pageSize}
+	 
+	</select>
+	
+	<select id="count" parameterType="String"   resultType="Long"  >
+	   select count(id)  
+	   from contacts
+	   where master_phone = #{masterPhone}
+	</select>
+	
+	<select id="getByContactsId" parameterType="String"   resultMap="contactsMap"  >
+	   select * 
+	   from contacts
+	   where contacts_id = #{contactsId}
+	</select>   
+	<select id="getContacts" parameterType="java.util.HashMap"   resultMap="contactsMap"  >
+	   select * 
+	   from contacts
+	   where master_phone = #{masterPhone} and friend_phone = #{friendPhone}
+	</select>   	
+	 
+
+	
+	<update id="update"  parameterType="com.xd.model.Contacts">
+	    update contacts 
+	    set name=#{name},modify_time=#{modifyTime}
+	    where contacts_id = #{contactsId}
+	</update>
+	
+
+	<insert id="addContacts" parameterType="com.xd.model.Contacts">
+		insert into contacts (contacts_id,master_phone,friend_phone,name,relation_id,company,email,remark,head_image,modify_time,record_time)
+		 values(#{contactsId},#{masterPhone},#{friendPhone},#{name},#{relationId},#{company},#{email},#{remark},#{headImage},#{modifyTime},#{recordTime})
+	</insert>
+		
+	<delete id="deleteByContactsId" parameterType="String" >
+	    delete from contacts where contacts_id = #{contactsId}
+	</delete>
+	<delete id="deleteByRelationId" parameterType="String" >
+	    delete from contacts where relation_id = #{relationId}
+	</delete>
+	
+	<delete id="delete" parameterType="java.util.HashMap" >
+	    delete from contacts where master_phone = #{masterPhone} and friend_phone = #{friendPhone}
+	</delete>
+	
+	<resultMap type="contacts" id="contactsMap">
+	     <id property="id" column="id" />  
+	     <result property="contactsId" column="contacts_id"/>  
+	     <result property="relationId" column="relation_id"/>  
+	     <result property="masterPhone" column="master_phone"/>
+	     <result property="friendPhone" column="friend_phone"/>
+	     <result property="name" column="name"/>
+	     <result property="company" column="company"/>
+	     <result property="email" column="email"/> 
+	     <result property="headImage" column="head_image"/>
+	     <result property="remark" column="remark"/>
+	     <result property="modifyTime" column="modify_time"/>
+	     <result property="recordTime" column="record_time"/>
+	</resultMap>
+	
+</mapper>

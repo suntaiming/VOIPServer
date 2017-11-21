@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SmsDao">
+   
+	
+	
+	<select id="getByPhoneNumber" parameterType="String"   resultMap="smsMap"  >
+	   select *
+	   from sms
+	   where phone_number = #{phoneNumber}
+	</select>   
+	
+	    
+   <update id="updateSms" parameterType="java.util.Map">
+       update sms set verify_code = #{verifyCode},time=#{time},record_time=#{recordTime} where phone_number = #{phoneNumber}
+   </update>
+	
+
+	
+
+	<insert id="addSms" parameterType="com.xd.model.Sms">
+		insert into sms (phone_number,verify_Code,time,record_time)
+		 values(#{phoneNumber},#{verifyCode},#{time},#{recordTime})
+	</insert>
+		
+	<delete id="deleteByPhoneNumber" parameterType="String" >
+	    delete from sms where phone_number = #{phoneNumber}
+	</delete>
+	
+	<resultMap type="Sms" id="smsMap">
+	     <id property="id" column="id" />  
+	     <result property="phoneNumber" column="phone_number"/>  
+	     <result property="verifyCode" column="verify_Code"/>
+	     <result property="time" column="time"/>
+	     <result property="recordTime" column="record_time"/>	     
+	</resultMap>
+	
+</mapper>

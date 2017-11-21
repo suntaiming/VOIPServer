@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UserDao">
+   
+	
+	
+	<select id="getByUsername" parameterType="String"   resultMap="userMap"  >
+	   select id,user_id,username,phone_number,name,public_key,key_sequence,contacts_sequence,sex,age,company,email,status,head_image,client_id,modify_time,record_time 
+	   from user
+	   where username = #{username}
+	</select>   
+	
+	<select id="getUserByPhone" parameterType="String"   resultMap="userMap"  >
+	   select id,user_id,username,phone_number,name,public_key,key_sequence,contacts_sequence,sex,age,company,email,status,head_image,client_id,modify_time,record_time 
+	   from user
+	   where phone_number = #{phoneNumber}
+	</select>   
+	
+	<select id="getClientIdByPhone" parameterType="String"   resultMap="userMap"  >
+	   select id,user_id,username,phone_number,client_id 
+	   from user
+	   where phone_number = #{phoneNumber}
+	</select>   
+		
+		
+	<select id="findByPhones"    resultMap="userMap"  >
+	   select id,user_id,username,phone_number,name 
+	   from user
+	   where phone_number in 
+	   <foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		 #{item}  
+	   </foreach>
+	</select>  
+	
+	
+		
+	<select id="loginUser" parameterType="String"   resultMap="userMap"  >
+	   select id,username,password
+	   from user
+	   where username = #{username}
+	</select>    
+
+	
+   <update id="updatePassword" parameterType="java.util.Map">
+       update user set password = #{password}, modify_time=#{modifyTime} where phone_number = #{phoneNumber}
+   </update>
+   
+   <update id="updateClientId" parameterType="java.util.Map">
+       update user set client_id = #{clientId}, modify_time=#{modifyTime} where phone_number = #{phoneNumber}
+   </update>
+   
+   <update id="updateContactsSequence" parameterType="java.util.Map">
+       update user set contacts_sequence = #{contactsSequence} where  phone_number = #{phoneNumber}
+   </update>
+
+   
+   <update id="updatePublicKey" parameterType="java.util.Map">
+       update user set public_key = #{publicKey},key_sequence = #{keySequence},modify_time = #{modifyTime}
+       where  phone_number = #{phoneNumber}
+   </update>
+  
+   <update id="updateUser" parameterType="com.xd.model.User">
+       update user set name=#{name},sex=#{sex},age={age},company=#{company},email=#{email},head_image=#{headImage},modify_time=#{modifyTime}
+       where username = #{username}
+   </update>
+   
+   
+	<insert id="addUser" parameterType="com.xd.model.User">
+		insert into user (user_id,username,password,phone_number,name,sex,age,company,email,status,head_image,modify_time,record_time)
+		 values(#{userId},#{username},#{password},#{phoneNumber},#{name},#{sex},#{age},#{company},#{email},#{status},#{headImage},#{modifyTime},#{recordTime})
+	</insert>
+		
+    
+		
+	<delete id="deleteUser" parameterType="String" >
+	    delete from user where username = #{username}
+	</delete>
+	
+	<resultMap type="User" id="userMap">
+	     <id property="id" column="id" />  
+	     <result property="userId" column="user_id"/>  
+	     <result property="username" column="username"/>  
+	     <result property="password" column="password"/>
+	     <result property="phoneNumber" column="phone_number"/>
+	     <result property="name" column="name"/>
+	     <result property="publicKey" column="public_key"/>
+	     <result property="keySequence" column="key_sequence"/>
+	     <result property="contactsSequence" column="contacts_sequence"/>
+	     <result property="sex" column="sex"/>
+	     <result property="age" column="age"/>
+	     <result property="company" column="company"/>
+	     <result property="email" column="email"/> 
+	     <result property="status" column="status"/>
+	     <result property="headImage" column="head_image"/>
+	     <result property="clientId" column="client_id"/>
+	     <result property="modifyTime" column="modify_time"/>
+	     <result property="recordTime" column="record_time"/>
+	</resultMap>
+	
+</mapper>
